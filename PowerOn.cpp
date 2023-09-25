@@ -131,12 +131,31 @@ float calcularImc(float peso, float altura){
     return peso / (altura * altura);
 }
 
+void calcularLucro(struct IndiceModalidade indiceModalidade[], struct Modalidades modalidades[], int contadorModalidades, struct IndiceProfessor indiceProfessor[], struct Professores professores[], int contadorProfessores){
+    int codigoDaModalidade = 0;
+    cout << "Digite o código da modalidade que deseja saber o faturamento" << endl;
+    cin >> codigoDaModalidade;
+
+    int resultadoBuscaModalidade = buscarModalidade(indiceModalidade, contadorModalidades, codigoDaModalidade);
+    if(resultadoBuscaModalidade != -1){
+        cout << "Descrição: " << modalidades[resultadoBuscaModalidade].descricaoDaModalidade << endl;
+    } else {
+        cout << "Modalidade não encontrada" << endl;
+    }
+
+    int codigoDoProfessorDaModalidade = modalidades[resultadoBuscaModalidade].modalidadeCodigoDoProfessor;
+    int resultadoBuscaProfessor = buscarProfessor(indiceProfessor, contadorProfessores, codigoDoProfessorDaModalidade);
+    cout <<"Professor: " << professores[resultadoBuscaProfessor].nomeDoProfessor;
+
+}
+
 void inserirNovosAlunos(struct Aluno aluno[], struct IndiceAluno indiceAluno[], int& contador){
+    cout << "************* CADASTRAR NOVOS ALUNOS ****************";
     const int tamanhoVetor = 8;
 
     for (int i = 4; i < tamanhoVetor; i++) {
         while (true) {
-            cout << "\nCpf do aluno (padrão 8888) " << "(digite 0 para sair): ";
+            cout << "\n\n*Digite o CPF do aluno (padrão 8888) " << "(digite 0 para sair): ";
             cin >> aluno[i].cpf;
             if(aluno[i].cpf == 0){
                 break;
@@ -168,7 +187,6 @@ void inserirNovosAlunos(struct Aluno aluno[], struct IndiceAluno indiceAluno[], 
             bool dataDeNascimentoNaoVazia = false;
             while(!dataDeNascimentoNaoVazia){
                 cout << "Data de nascimento do Aluno(a): ";
-                cin.ignore();
                 getline(cin, aluno[i].dataDeNascimento);
                     if (aluno[i].dataDeNascimento != ""){
                         dataDeNascimentoNaoVazia = true;
@@ -182,7 +200,6 @@ void inserirNovosAlunos(struct Aluno aluno[], struct IndiceAluno indiceAluno[], 
             cin >> aluno[i].peso;
             cout << "Altura do aluno(a): ";
             cin >> aluno[i].altura;
-            cin.ignore();
             float imc = calcularImc(aluno[i].peso, aluno[i].altura);
             cout << "\nO IMC do aluno(a) é: " << imc <<endl;
 
@@ -197,7 +214,7 @@ void inserirNovosAlunos(struct Aluno aluno[], struct IndiceAluno indiceAluno[], 
             } else if (imc >= 35 && imc <= 39.9){
                 cout << "O aluno " << aluno[i].nomeDoAluno << " está com Obesidade grau II segundo os padrões IMC" << endl;
             } else {
-                cout << "O aluno " << aluno[i].nomeDoAluno << " está com Obesidade grau III segundo os padrões IMC" << endl;
+                cout << "O aluno(a) " << aluno[i].nomeDoAluno << " está com Obesidade grau III segundo os padrões IMC" << endl;
             }
             //Atualizar o indice
             int j; /* J representa a posição do vetor Indice de Alunos
@@ -223,18 +240,21 @@ void inserirNovosAlunos(struct Aluno aluno[], struct IndiceAluno indiceAluno[], 
         }
         indiceAluno[j + 1].cpfIndice = aluno[i].cpf;
         indiceAluno[j + 1].enderecoDoAluno = i;
+        cout << "\n***Aluno cadastrado com Sucesso***" <<endl;
         contador++;
     }
-    cout<<"\n\nSaindo da inserção de alunos...\n" <<endl;
+    cout<<"\n\nSaindo da inserção de alunos..." <<endl;
     cin.ignore();
 }
 
 void inserirNovosProfessores(struct Professores professores[], struct IndiceProfessor indiceProfessor[], int& contador){
+    cout << "\n\n\n************* CADASTRAR NOVOS PROFESSORES ****************";
+
     const int tamanhoVetor = 8;
 
     for (int i = 4; i < tamanhoVetor; i++) {
         while(true) {
-            cout << "\nCódigo do professor (padrão 88) " << "(digite 0 para sair): ";
+            cout << "\n\n*Digite o código do professor (padrão 88) " << "(digite 0 para sair): ";
             cin >> professores[i].codigoDoProfessor;
             if(professores[i].codigoDoProfessor == 0){
                 break;
@@ -310,16 +330,21 @@ void inserirNovosProfessores(struct Professores professores[], struct IndiceProf
         }
         indiceProfessor[j + 1].codigoProfessor = professores[i].codigoDoProfessor;
         indiceProfessor[j + 1].enderecoProfessor = i;
+        cout << "\n***Professor cadastrado com Sucesso***" <<endl;
         contador++;
     }
+
+    cout<<"\n\nSaindo da inserção de professores...."<<endl;
 }
 
 void inserirNovasModalidades(struct Modalidades modalidades[], struct IndiceModalidade indiceModalidade[], struct IndiceProfessor indiceProfessor[], struct Professores professores[], int& contador){
+    cout << "\n\n\n************* CADASTRAR NOVAS MODALIDADES ****************";
+
     const int tamanhoVetor = 8;
 
     for (int i = 4; i < tamanhoVetor; i++) {
         while (true) {
-            cout << "\nCódigo da Modalidade (padrão 88) " << "(digite 0 para sair): ";
+            cout << "\n\n*Digite o código da Modalidade (padrão 88) " << "(digite 0 para sair): ";
             cin >> modalidades[i].codigoDaModalidade;
             if(modalidades[i].codigoDaModalidade == 0){
                 break;
@@ -357,7 +382,7 @@ void inserirNovasModalidades(struct Modalidades modalidades[], struct IndiceModa
         cin >> modalidades[i].modalidadeCodigoDoProfessor;
         int codigoASerProcurado = modalidades[i].modalidadeCodigoDoProfessor;
         int resultadoBuscarProfessor =  buscarProfessor(indiceProfessor, contador, codigoASerProcurado);
-        cout <<"Professor(a): " << professores[resultadoBuscarProfessor].nomeDoProfessor;
+        cout <<"Professor(a): " << professores[resultadoBuscarProfessor].nomeDoProfessor <<endl;
 
         //Atualizar o indice
         int j; /* J representa a posição do vetor Indice de Alunos
@@ -383,67 +408,86 @@ void inserirNovasModalidades(struct Modalidades modalidades[], struct IndiceModa
         }
         indiceModalidade[j + 1].codigoModalidade = modalidades[i].codigoDaModalidade;
         indiceModalidade[j + 1].enderecoModalidade = i;
+        cout << "\n***Modalidade cadastrada com Sucesso***" <<endl;
         contador++;
     }
-    cout << "\n\nSaindo da inserção de modalidades....\n\n";
+    cout << "\n\nSaindo da inserção de modalidades....";
 }
 
 void inserirNovasMatriculas(struct Matricula matriculas[], struct IndiceMatricula indiceMatricula[], struct IndiceAluno indiceAluno[], struct Aluno aluno[], struct IndiceModalidade indiceModalidade[], struct  Modalidades modalidades[],int& contador){
+    cout << "\n\n\n************* CADASTRAR NOVAS MATRICULAS ****************";
+
     const int tamanhoVetor = 8;
 
     for (int i = 4; i < tamanhoVetor; ++i) {
+        bool vagaEncontrada = false;
 
-
-        while (true) {
-            cout << "Digite o código da Matricula" << "(digite 0 para sair): ";
+        while (!vagaEncontrada) {
+            cout << "\n\n*Digite o código da Matricula" << "(digite 0 para sair): ";
             cin >> matriculas[i].codigoDaMatricula;
+
             if(matriculas[i].codigoDaMatricula == 0){
                 break;
             }
+
             int validarCodigo = buscarMatricula(indiceMatricula, contador, matriculas[i].codigoDaMatricula);
             if (validarCodigo != -1){
                 cout << "Codigo já cadastrado na matricula do CPF: " << matriculas[validarCodigo].cpfDoAluno;
             } else {
-                break;
+                cout << "Digite o CPF do aluno: ";
+                cin >> matriculas[i].cpfDoAluno;
+                int cpfProcurado = matriculas[i].cpfDoAluno;
+                int resultadoBuscaCpf = buscarAluno(indiceAluno, contador, cpfProcurado);
+                if(resultadoBuscaCpf != -1){
+                    cout << "Nome do Aluno(a): " << aluno[resultadoBuscaCpf].nomeDoAluno<<endl;
+                } else {
+                    cout << "Aluno(a) não encontrado." <<endl;
+                    continue;
+                }
             }
+
+            cout << "Digite o código da modalidade: ";
+            cin >> matriculas[i].matriculaCodigoDaModalidade;
+            int modalidadeProcurada =  matriculas[i].matriculaCodigoDaModalidade;
+            int resultadoBuscaModalidade = buscarModalidade(indiceModalidade, contador, modalidadeProcurada);
+            if(resultadoBuscaModalidade != -1){
+                cout << "Modalidade: " << modalidades[resultadoBuscaModalidade].descricaoDaModalidade<<endl;
+            } else {
+                cout << "Modalidade não encontrada." << endl;
+                continue;
+            }
+            int pessoasCadastradasNaModalidade = modalidades[resultadoBuscaModalidade].totalDeAlunos;
+            int limiteDePessoasNaModalidade = modalidades[resultadoBuscaModalidade].limiteDeAlunos;
+
+            if(pessoasCadastradasNaModalidade < limiteDePessoasNaModalidade){
+                cout << "\nHá vagas disponiveis nessa modalidade" << endl;
+                modalidades[resultadoBuscaModalidade].totalDeAlunos = modalidades[resultadoBuscaModalidade].totalDeAlunos + 1;
+                cout << "\n****Aluno matriculado com sucesso!" << endl;
+                cout << "\nAlunos matriculados: " << modalidades[resultadoBuscaModalidade].totalDeAlunos<< endl;
+                cout << "Limite de alunos da modalidade: " << limiteDePessoasNaModalidade << endl;
+                vagaEncontrada = true;
+            } else {
+                cout<< "\nNão há vagas disponiveis" << endl;
+                cout << "\nAlunos matriculados: " << pessoasCadastradasNaModalidade << endl;
+                cout << "Limite de alunos da modalidade: " << limiteDePessoasNaModalidade << endl;
+            }
+
+            cout << "Quantidade de aulas: ";
+            cin >> matriculas[i].quantidadeDeAulas;
+
         }
         if(matriculas[i].codigoDaMatricula == 0){
             break;
         }
 
-        cin.ignore();
-
-        cout << "Digite o cpf do aluno: ";
-        cin >> matriculas[i].cpfDoAluno;
-        int cpfProcurado = matriculas[i].cpfDoAluno;
-        int resultadoBuscaCpf = buscarAluno(indiceAluno, contador, cpfProcurado);
-        if(resultadoBuscaCpf != -1){
-            cout << "Nome do Aluno(a): " << aluno[resultadoBuscaCpf].nomeDoAluno<<endl;
-        } else {
-            cout << "Aluno(a) não encontrado." <<endl;
+        int j;
+        for (j = contador - 1; j >= 0 && matriculas[i].codigoDaMatricula < indiceMatricula[j].codigoMatricula; j--) {
+            indiceMatricula[j + 1] = indiceMatricula[j];
         }
-
-        cout << "Digite o código da modalidade: ";
-        cin >> matriculas[i].matriculaCodigoDaModalidade;
-        int modalidadeProcurada =  matriculas[i].matriculaCodigoDaModalidade;
-        int resultadoBuscaModalidade = buscarModalidade(indiceModalidade, contador, modalidadeProcurada);
-        if(resultadoBuscaModalidade != -1){
-            cout << "Modalidade: " << modalidades[resultadoBuscaModalidade].descricaoDaModalidade;
-        } else {
-            cout << "Modalidade não encontrada." << endl;
-        }
-
-        int pessoasCadastradasNaModalidade = modalidades[resultadoBuscaModalidade].limiteDeAlunos;
-        int limiteDePessoasNaModalidade = modalidades[resultadoBuscaModalidade].totalDeAlunos;
-
-        if(pessoasCadastradasNaModalidade < limiteDePessoasNaModalidade){
-            cout << "Há vagas disponiveis nessa modalidade" << endl;
-            pessoasCadastradasNaModalidade += 1;
-        } else {
-            cout<< "Não há vagas disponiveis" << endl;
-        }
-
-
+        indiceMatricula[j + 1].codigoMatricula = matriculas[i].codigoDaMatricula;
+        indiceMatricula[j + 1].enderecoMatricula = i;
+        cout << "\n***Matricula cadastrada com Sucesso***" <<endl;
+        contador++;
     }
 }
 
