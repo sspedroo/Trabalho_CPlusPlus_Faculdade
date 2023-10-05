@@ -205,13 +205,13 @@ void inserirNovosAlunos(struct Aluno aluno[], struct IndiceAluno indiceAluno[], 
 
             if(imc < 18.5 ){
                 cout << "O aluno(a) " << aluno[i].nomeDoAluno << " está com Magreza segundo os padrões IMC" << endl;
-            } else if (imc >= 18.5 && imc <= 24.9 ){
+            } else if (imc >= 18.5 && imc <= 24.99 ){
             cout << "O aluno(a) " << aluno[i].nomeDoAluno << " está com Peso normal segundo os padrões IMC" << endl;
-            } else if (imc >= 25 && imc <= 29.9){
+            } else if (imc >= 25 && imc <= 29.99){
                 cout << "O aluno(a) " << aluno[i].nomeDoAluno << " está com Sobrepeso segundo os padrões IMC" << endl;
-            } else if (imc >= 30 && imc <= 34.9){
+            } else if (imc >= 30 && imc <= 34.99){
                 cout << "O aluno " << aluno[i].nomeDoAluno << " está com Obesidade grau I segundo os padrões IMC" << endl;
-            } else if (imc >= 35 && imc <= 39.9){
+            } else if (imc >= 35 && imc <= 39.99){
                 cout << "O aluno " << aluno[i].nomeDoAluno << " está com Obesidade grau II segundo os padrões IMC" << endl;
             } else {
                 cout << "O aluno(a) " << aluno[i].nomeDoAluno << " está com Obesidade grau III segundo os padrões IMC" << endl;
